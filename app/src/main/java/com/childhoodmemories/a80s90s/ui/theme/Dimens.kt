@@ -13,10 +13,11 @@ object Dimens {
     }
 
     object TextSize {
+        val x_small = 12.sp
         val small = 16.sp
         val medium = 20.sp
         val large = 24.sp
-        val title = 50.sp
+        val title = 45.sp
     }
 
 }

@@ -3,4 +3,6 @@
     <string name="login">Login</string>
     <string name="register">Create an account</string>
     <string name="welcome">Welcom back in 80-90s</string>
+    <string name="home_title">Share your memories</string>
+    <string name="home_hello">Hello %s</string>
 </resources>

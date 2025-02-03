@@ -23,7 +23,8 @@ fun MemoTitle(
             .padding(horizontal = Dimens.Padding.medium),
         textAlign = TextAlign.Center,
         text = text,
-        style = TextStyle(fontSize = Dimens.TextSize.title, fontStyle = FontStyle.Italic),
+        style = TextStyle(fontSize = Dimens.TextSize.title,
+            fontStyle = FontStyle.Italic),
     )
 }
 

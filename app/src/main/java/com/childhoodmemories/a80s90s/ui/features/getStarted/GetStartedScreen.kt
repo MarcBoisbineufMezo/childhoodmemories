@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.childhoodmemories.a80s90s.R
+import com.childhoodmemories.a80s90s.Screen
 import com.childhoodmemories.a80s90s.ui.designSystem.MemoTitle
 import com.childhoodmemories.a80s90s.ui.designSystem.PrimaryButton
 import com.childhoodmemories.a80s90s.ui.designSystem.SecondaryButton
@@ -35,12 +36,10 @@ fun GetStartedScreen(
     LaunchedEffect(Unit) {
         viewModel.init()
     }
-
-
+    
     Box(modifier = modifier) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
             Spacer(modifier = Modifier.height(Dimens.Padding.medium))
 
@@ -63,14 +62,18 @@ fun GetStartedScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = Dimens.Padding.medium),
-            ) { }
+            ) {
+                navController.navigate(Screen.Home.route)
+            }
             Spacer(modifier = Modifier.height(Dimens.Padding.medium))
             PrimaryButton(
                 text = stringResource(R.string.register),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = Dimens.Padding.medium),
-            ) { }
+            ) {
+
+            }
             Spacer(modifier = Modifier.height(Dimens.Padding.medium))
 
         }

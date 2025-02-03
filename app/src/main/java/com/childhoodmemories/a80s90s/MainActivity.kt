@@ -4,15 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.childhoodmemories.a80s90s.ui.features.getStarted.GetStartedScreen
+import com.childhoodmemories.a80s90s.ui.features.home.HomeScreen
 import com.childhoodmemories.a80s90s.ui.theme.Memories80s90sTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,33 +21,33 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             Memories80s90sTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    GetStartedScreen(
-                        modifier = Modifier.padding(innerPadding),
-                        navController = navController
-                    )
-//                    Greeting(
-//                        name = "Android",
-//                        modifier = Modifier.padding(innerPadding)
-//                    )
-                }
+                BuildNavGraph(navController)
             }
+        }
+    }
+
+    // TODO: Implement navigation graph in external class
+    @Composable
+    private fun BuildNavGraph(navController: NavHostController, modifier: Modifier = Modifier) {
+        NavHost(navController = navController, startDestination = Screen.GetStarted.route) {
+            composable(Screen.GetStarted.route) {
+                GetStartedScreen(
+                    modifier = modifier,
+                    navController = navController
+                )
+            }
+            composable(Screen.Home.route) {
+                HomeScreen(navController)
+            }
+            //                composable("profile") { ProfileScreen(navController) }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+enum class Screen(val route: String) {
+    GetStarted("getStarted"),
+    Home("home"),
+    Profile("profile")
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Memories80s90sTheme {
-        Greeting("Android")
-    }
-}
+
