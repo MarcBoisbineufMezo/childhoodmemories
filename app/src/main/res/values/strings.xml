@@ -5,4 +5,10 @@
     <string name="welcome">Welcom back in 80-90s</string>
     <string name="home_title">Share your memories</string>
     <string name="home_hello">Hello %s</string>
+    <string name="memories">Memories</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="cancel">Cancel</string>
+    <string name="firstname">Firstname</string>
+    <string name="lastname">Lastname</string>
 </resources>

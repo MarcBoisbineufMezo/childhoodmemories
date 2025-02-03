@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.childhoodmemories.a80s90s.R
+import com.childhoodmemories.a80s90s.Screen
 import com.childhoodmemories.a80s90s.ui.designSystem.IconButton
 import com.childhoodmemories.a80s90s.ui.designSystem.MemoCard
 import com.childhoodmemories.a80s90s.ui.theme.Dimens
@@ -43,20 +44,16 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            HeaderHome("User")
+            HeaderHome("User") {
+                navController.navigate(Screen.Profile.route)
+            }
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(Dimens.Padding.medium),
                 contentPadding = PaddingValues(Dimens.Padding.medium),
             ) {
-                item {
-                    MemoCard()
-                }
-                item {
-                    MemoCard()
-                }
-                item {
+                items(100) {
                     MemoCard()
                 }
             }
@@ -78,7 +75,8 @@ fun HomeScreen(
 
 @Composable
 private fun HeaderHome(
-    firstName: String
+    firstName: String,
+    onProfileClick: () -> Unit,
 ) {
     Row {
         Column(
@@ -108,7 +106,7 @@ private fun HeaderHome(
             icon = Icons.Filled.AccountCircle,
             selected = true,
         ) {
-            // TODO navigate to profile
+            onProfileClick()
         }
     }
 }
