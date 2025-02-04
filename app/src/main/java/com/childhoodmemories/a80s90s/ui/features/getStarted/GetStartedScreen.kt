@@ -1,7 +1,8 @@
 package com.childhoodmemories.a80s90s.ui.features.getStarted
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,7 +24,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -192,6 +192,7 @@ private fun SignUpView(
                 .padding(horizontal = Dimens.Padding.medium),
         )
         Spacer(modifier = Modifier.height(Dimens.Padding.medium))
+
         TextField(
             value = "",
             onValueChange = {},
@@ -281,7 +282,7 @@ private fun SignInView(
         Spacer(modifier = Modifier.height(Dimens.Padding.large))
 
         SecondaryButton(
-            text = stringResource(R.string.login),
+            text = stringResource(R.string.validate),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = Dimens.Padding.medium),

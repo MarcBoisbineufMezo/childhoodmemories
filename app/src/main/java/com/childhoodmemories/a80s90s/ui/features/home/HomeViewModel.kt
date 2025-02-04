@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.childhoodmemories.a80s90s.domain.GetCurrentUserUseCase
 import com.childhoodmemories.a80s90s.domain.GetLikedMemoriesUseCase
 import com.childhoodmemories.a80s90s.domain.LikeMemoryUseCase
-import com.childhoodmemories.a80s90s.domain.LoadMemoriesUseCase
+import com.childhoodmemories.a80s90s.domain.GetMemoriesUseCase
 import com.childhoodmemories.a80s90s.model.Memory
 import com.childhoodmemories.a80s90s.model.User
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,10 +17,10 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {
 
-    val loadMemoriesUseCase = LoadMemoriesUseCase()
-    val getCurrentUserUseCase = GetCurrentUserUseCase()
-    val likeMemoryUseCase = LikeMemoryUseCase()
-    val getLikedMemoriesUseCase = GetLikedMemoriesUseCase()
+    private val getMemoriesUseCase = GetMemoriesUseCase()
+    private val getCurrentUserUseCase = GetCurrentUserUseCase()
+    private val likeMemoryUseCase = LikeMemoryUseCase()
+    private val getLikedMemoriesUseCase = GetLikedMemoriesUseCase()
 
     // State
     private val _state by lazy { MutableStateFlow(State()) }
@@ -32,7 +32,7 @@ class HomeViewModel : ViewModel() {
     fun init() {
         loadCurrentUser()
         viewModelScope.launch {
-            val memories = loadMemoriesUseCase()
+            val memories = getMemoriesUseCase()
             val likedMemories = getLikedMemoriesUseCase()
             _state.value = _state.value.copy(
                 screenState = ScreenState.Loaded,
@@ -76,8 +76,7 @@ class HomeViewModel : ViewModel() {
     )
 
     enum class ScreenState {
-        Loading,
-        Loaded,
+        Loading, Loaded,
     }
 
 }

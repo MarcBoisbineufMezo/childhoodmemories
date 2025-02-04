@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class GetStartedViewModel : ViewModel() {
 
-    val signInUseCase = SignInUseCase()
-    val getCurrentUserUseCase = GetCurrentUserUseCase()
+    private val signInUseCase = SignInUseCase()
+    private val getCurrentUserUseCase = GetCurrentUserUseCase()
 
     // State
     private val _state by lazy { MutableStateFlow(State()) }

@@ -16,10 +16,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ProfileViewModel : ViewModel() {
-    val logOutUseCase = LogOutUseCase()
-    val getCurrentUserUseCase = GetCurrentUserUseCase()
-    val getUserMemoriesUseCase = GetUserMemoriesUseCase()
-    val getLikedMemoriesUseCase = GetLikedMemoriesUseCase()
+    private val logOutUseCase = LogOutUseCase()
+    private val getCurrentUserUseCase = GetCurrentUserUseCase()
+    private val getUserMemoriesUseCase = GetUserMemoriesUseCase()
+    private val getLikedMemoriesUseCase = GetLikedMemoriesUseCase()
 
     // State
     private val _state by lazy { MutableStateFlow(State()) }

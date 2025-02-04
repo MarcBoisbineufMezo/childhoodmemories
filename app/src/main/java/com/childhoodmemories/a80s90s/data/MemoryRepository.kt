@@ -10,7 +10,8 @@ object MemoryRepository {
 
     suspend fun loadMemories(): List<Memory> {
         // TODO improve with suspend
-        return memorieDao.memories + mockMemoriesList.sortedByDescending { it.id }
+        val memoriesSaved = memorieDao.memories
+        return memoriesSaved + mockMemoriesList.sortedByDescending { it.id }
     }
 
     fun loadLikedMemories(userId: String): List<Memory> {
@@ -24,6 +25,10 @@ object MemoryRepository {
         } else {
             memorieDao.saveLikedMemories(userId, likedMemories + memory)
         }
+    }
+
+    suspend fun addMemory(memory: Memory) {
+        memorieDao.memories += memory
     }
 }
 

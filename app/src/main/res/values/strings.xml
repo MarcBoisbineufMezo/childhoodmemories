@@ -4,6 +4,7 @@
     <string name="register">Create an account</string>
     <string name="welcome">Welcom back in 80-90s</string>
     <string name="home_title">Share your memories</string>
+    <string name="add_title">Add a memory</string>
     <string name="home_hello">Hello %s</string>
     <string name="memories">Memories</string>
     <string name="likes">Likes</string>
@@ -12,4 +13,7 @@
     <string name="cancel">Cancel</string>
     <string name="firstname">Firstname</string>
     <string name="lastname">Lastname</string>
+    <string name="title_add_memory">Memory\'s title</string>
+    <string name="description_add_memory">Short description</string>
+    <string name="validate">Validate</string>
 </resources>

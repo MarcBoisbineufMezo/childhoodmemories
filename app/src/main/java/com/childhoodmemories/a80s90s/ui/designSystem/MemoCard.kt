@@ -1,5 +1,6 @@
 package com.childhoodmemories.a80s90s.ui.designSystem
 
+import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
@@ -23,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,27 +37,30 @@ import coil3.compose.AsyncImage
 import com.childhoodmemories.a80s90s.data.memory1
 import com.childhoodmemories.a80s90s.model.Memory
 import com.childhoodmemories.a80s90s.model.User
+import com.childhoodmemories.a80s90s.ui.StoreData
 import com.childhoodmemories.a80s90s.ui.theme.Dimens
+import com.childhoodmemories.a80s90s.ui.theme.orange
 import com.childhoodmemories.a80s90s.ui.theme.violet
 
 @Composable
 fun MemoCard(
     modifier: Modifier = Modifier,
+    dataStore: StoreData,
     memory: Memory,
     isLiked: Boolean,
     onLikeClicked: (Memory) -> Unit,
 ) {
     Card(
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
             contentColor = violet,
+            containerColor = orange.copy(alpha = 0.3f),
         ),
     ) {
         Box {
             Column {
                 HeaderCard(user = memory.user)
-                BodyCard(memory = memory, isLiked = isLiked) {
+                BodyCard(dataStore = dataStore, memory = memory, isLiked = isLiked) {
                     onLikeClicked(it)
                 }
             }
@@ -62,33 +72,73 @@ fun MemoCard(
 @Composable
 private fun BodyCard(
     memory: Memory,
+    dataStore: StoreData,
     isLiked: Boolean,
     onLikeClicked: (Memory) -> Unit,
 ) {
+    var imageUri: Uri? by remember { mutableStateOf(null) }
+    val context = LocalContext.current
+    LaunchedEffect(key1 = true) {
+        dataStore.getImage(context, memory.id.toString()).collect {
+            if (it != null)
+                imageUri = Uri.parse(it)
+        }
+    }
+
     val contrast = 2f
     val brightness = -180f
     val colorMatrix = ColorMatrix(
         floatArrayOf(
-            contrast, 0f, 0f, 0f, brightness,
-            0f, contrast, 0f, 0f, brightness,
-            0f, 0f, contrast, 0f, brightness,
-            0f, 0f, 0f, 1f, 0f
+            contrast,
+            0f,
+            0f,
+            0f,
+            brightness,
+            0f,
+            contrast,
+            0f,
+            0f,
+            brightness,
+            0f,
+            0f,
+            contrast,
+            0f,
+            brightness,
+            0f,
+            0f,
+            0f,
+            1f,
+            0f
         )
-    ).apply {
-    }
+    ).apply {}
+
     Column {
         Box {
             Column {
-                AsyncImage(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = Dimens.Padding.medium)
-                        .clip(RoundedCornerShape(10.dp)),
-                    model = memory.image,
-                    contentScale = ContentScale.FillWidth,
-                    contentDescription = "80s90s",
-                    colorFilter = ColorFilter.colorMatrix(colorMatrix),
-                )
+
+                if (memory.image.contains("content://").not()) {
+                    AsyncImage(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = Dimens.Padding.medium)
+                            .clip(RoundedCornerShape(10.dp)),
+                        model = memory.image,
+                        contentScale = ContentScale.FillWidth,
+                        contentDescription = "80s90s",
+                        colorFilter = ColorFilter.colorMatrix(colorMatrix),
+                    )
+                } else {
+                    AsyncImage(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = Dimens.Padding.medium)
+                            .clip(RoundedCornerShape(10.dp)),
+                        model = imageUri,
+                        contentScale = ContentScale.FillWidth,
+                        contentDescription = "80s90s",
+                        colorFilter = ColorFilter.colorMatrix(colorMatrix),
+                    )
+                }
                 Spacer(modifier = Modifier.size(Dimens.Padding.medium))
             }
             IconButton(
@@ -126,8 +176,7 @@ private fun BodyCard(
 @Composable
 private fun HeaderCard(user: User) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         verticalAlignment = CenterVertically,
     ) {
         AsyncImage(
@@ -151,5 +200,5 @@ private fun HeaderCard(user: User) {
 @Preview
 @Composable
 fun MemoCardPreview() {
-    MemoCard(memory = memory1, isLiked = true) {}
+    MemoCard(memory = memory1, isLiked = true, dataStore = remember { StoreData }) {}
 }
