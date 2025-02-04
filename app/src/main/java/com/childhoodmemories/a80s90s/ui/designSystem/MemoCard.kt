@@ -1,6 +1,5 @@
 package com.childhoodmemories.a80s90s.ui.designSystem
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,35 +22,32 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.childhoodmemories.a80s90s.R
+import coil3.compose.AsyncImage
+import com.childhoodmemories.a80s90s.data.memory1
+import com.childhoodmemories.a80s90s.model.Memory
+import com.childhoodmemories.a80s90s.model.User
 import com.childhoodmemories.a80s90s.ui.theme.Dimens
 import com.childhoodmemories.a80s90s.ui.theme.violet
 
 @Composable
 fun MemoCard(
     modifier: Modifier = Modifier,
+    memory: Memory,
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(
             contentColor = violet,
         ),
     ) {
         Box {
-//            Image(
-//                modifier = Modifier.fillMaxSize(),
-//                painter = painterResource(R.drawable.card_bg),
-//                contentDescription = "80s90s",
-//                contentScale = ContentScale.FillWidth,
-//            )
             Column {
-                HeaderCard()
-                BodyCard()
+                HeaderCard(user = memory.user)
+                BodyCard(memory = memory)
             }
 
         }
@@ -59,7 +55,7 @@ fun MemoCard(
 }
 
 @Composable
-private fun BodyCard() {
+private fun BodyCard(memory: Memory) {
     val contrast = 2f
     val brightness = -180f
     val colorMatrix = ColorMatrix(
@@ -74,12 +70,12 @@ private fun BodyCard() {
     Column {
         Box {
             Column {
-                Image(
+                AsyncImage(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = Dimens.Padding.medium)
                         .clip(RoundedCornerShape(10.dp)),
-                    painter = painterResource(R.drawable.avatar),
+                    model = memory.image,
                     contentScale = ContentScale.FillWidth,
                     contentDescription = "80s90s",
                     colorFilter = ColorFilter.colorMatrix(colorMatrix),
@@ -99,7 +95,7 @@ private fun BodyCard() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = Dimens.Padding.medium),
-            text = "Kevin MacAlister",
+            text = memory.title,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
         )
@@ -107,10 +103,8 @@ private fun BodyCard() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = Dimens.Padding.medium, vertical = Dimens.Padding.small),
-            text = "Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n'a pas fait que survivre cinq siècles, mais s'est aussi adapté à la bureautique informatique, sans que son contenu n'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker.\n".substring(
-                0,
-                150
-            ),
+            text = if (memory.description.length > 150) memory.description.substring(0, 150)
+            else memory.description,
             style = MaterialTheme.typography.bodySmall,
         )
 
@@ -119,23 +113,23 @@ private fun BodyCard() {
 }
 
 @Composable
-private fun HeaderCard() {
+private fun HeaderCard(user: User) {
     Row(
         modifier = Modifier
             .fillMaxWidth(),
         verticalAlignment = CenterVertically,
     ) {
-        Image(
+        AsyncImage(
             modifier = Modifier
                 .size(100.dp)
                 .padding(Dimens.Padding.medium)
                 .clip(RoundedCornerShape(40.dp)),
-            painter = painterResource(R.drawable.avatar),
+            model = user.avatar,
             contentScale = ContentScale.FillWidth,
             contentDescription = "80s90s",
         )
         Text(
-            text = "Kevin MacAlister",
+            text = user.firstname + " " + user.lastname,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.fillMaxWidth(),
@@ -146,5 +140,5 @@ private fun HeaderCard() {
 @Preview
 @Composable
 fun MemoCardPreview() {
-    MemoCard()
+    MemoCard(memory = memory1)
 }

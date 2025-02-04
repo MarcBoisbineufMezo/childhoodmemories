@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.childhoodmemories.a80s90s.data.database.MemoSharedPreferences
 import com.childhoodmemories.a80s90s.ui.features.getStarted.GetStartedScreen
 import com.childhoodmemories.a80s90s.ui.features.home.HomeScreen
 import com.childhoodmemories.a80s90s.ui.features.profile.ProfileScreen
@@ -18,6 +19,7 @@ import com.childhoodmemories.a80s90s.ui.theme.Memories80s90sTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MemoSharedPreferences.context = this
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()

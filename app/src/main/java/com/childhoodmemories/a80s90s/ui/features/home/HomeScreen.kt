@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
@@ -19,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -62,6 +64,11 @@ fun HomeScreen(
         Text("Camera permission is required")
     }
 
+    val state = viewModel.getState()
+
+    LaunchedEffect(Unit) {
+        viewModel.init()
+    }
 
     Box(
         modifier = Modifier
@@ -71,7 +78,7 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            HeaderHome("User") {
+            HeaderHome(state.user?.firstname.orEmpty()) {
                 navController.navigate(Screen.Profile.route)
             }
             LazyColumn(
@@ -80,8 +87,8 @@ fun HomeScreen(
                 verticalArrangement = Arrangement.spacedBy(Dimens.Padding.medium),
                 contentPadding = PaddingValues(Dimens.Padding.medium),
             ) {
-                items(100) {
-                    MemoCard()
+                items(state.memories) { memory ->
+                    MemoCard(memory = memory)
                 }
             }
         }
