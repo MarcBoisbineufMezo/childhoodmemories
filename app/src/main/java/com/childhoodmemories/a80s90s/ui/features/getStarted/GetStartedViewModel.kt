@@ -6,6 +6,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import com.childhoodmemories.a80s90s.data.MemoException
 import com.childhoodmemories.a80s90s.domain.GetCurrentUserUseCase
+import com.childhoodmemories.a80s90s.domain.RegisterUseCase
 import com.childhoodmemories.a80s90s.domain.SignInUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 class GetStartedViewModel : ViewModel() {
 
     private val signInUseCase = SignInUseCase()
+    private val registerUseCase = RegisterUseCase()
     private val getCurrentUserUseCase = GetCurrentUserUseCase()
 
     // State
@@ -44,9 +46,9 @@ class GetStartedViewModel : ViewModel() {
             signInUseCase(SignInUseCase.Input(_state.value.email, _state.value.password))
             _state.value = _state.value.copy(sideEffect = SideEffect.NavigateToHome)
         } catch (e: MemoException.SignIn.InvalidEmail) {
-            _state.value = _state.value.copy(screenState = ScreenState.EmailError)
+            _state.value = _state.value.copy(screenState = ScreenState.SignInEmailError)
         } catch (e: MemoException.SignIn.PasswordNotCorrect) {
-            _state.value = _state.value.copy(screenState = ScreenState.PasswordError)
+            _state.value = _state.value.copy(screenState = ScreenState.SignInPasswordError)
         }
     }
 
@@ -66,11 +68,39 @@ class GetStartedViewModel : ViewModel() {
         _state.value = _state.value.copy(password = password)
     }
 
+    fun onLastNameChange(lastName: String) {
+        _state.value = _state.value.copy(lastName = lastName)
+    }
+
+    fun onFirstNameChange(firstName: String) {
+        _state.value = _state.value.copy(firstName = firstName)
+    }
+
+    fun register() {
+        val firstName = _state.value.firstName
+        val lastName = _state.value.lastName
+        val email = _state.value.email
+        val password = _state.value.password
+        if (firstName.isEmpty()) {
+            _state.value = _state.value.copy(screenState = ScreenState.RegisterFirstNameError)
+        } else if (lastName.isEmpty()) {
+            _state.value = _state.value.copy(screenState = ScreenState.RegisterLastNameError)
+        } else if (email.isEmpty()) {
+            _state.value = _state.value.copy(screenState = ScreenState.RegisterEmailError)
+        } else if (password.isEmpty()) {
+            _state.value = _state.value.copy(screenState = ScreenState.RegisterPasswordError)
+        } else {
+            registerUseCase(RegisterUseCase.Input(firstName, lastName, email, password))
+            _state.value = _state.value.copy(sideEffect = SideEffect.NavigateToHome)
+        }
+    }
 
     @Immutable
     data class State(
         val sideEffect: SideEffect? = null,
         val screenState: ScreenState = ScreenState.Loading,
+        val firstName: String = "",
+        val lastName: String = "",
         val email: String = "emma.thompson@example.com",
         val password: String = "securePass123",
     )
@@ -84,7 +114,11 @@ class GetStartedViewModel : ViewModel() {
         ChooseSignInOrSignUp,
         SignIn,
         SignUp,
-        EmailError,
-        PasswordError,
+        RegisterFirstNameError,
+        RegisterLastNameError,
+        RegisterEmailError,
+        RegisterPasswordError,
+        SignInEmailError,
+        SignInPasswordError,
     }
 }

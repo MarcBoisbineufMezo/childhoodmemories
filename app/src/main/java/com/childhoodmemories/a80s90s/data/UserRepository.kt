@@ -25,6 +25,10 @@ object UserRepository {
             return true
         }
     }
+
+    fun register(user: User) {
+
+    }
 }
 
 val emma = User(
