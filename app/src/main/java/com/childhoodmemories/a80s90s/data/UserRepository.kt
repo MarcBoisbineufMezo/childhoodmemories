@@ -27,7 +27,8 @@ object UserRepository {
     }
 
     fun register(user: User) {
-
+        userDao.userList += user
+        userDao.currentUser = user
     }
 }
 

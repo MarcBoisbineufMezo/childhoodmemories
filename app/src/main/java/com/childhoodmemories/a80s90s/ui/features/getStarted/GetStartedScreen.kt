@@ -288,7 +288,6 @@ private fun SignInView(
             maxLines = 1,
             isError = screenState == ScreenState.SignInEmailError,
         )
-
         Spacer(modifier = Modifier.height(Dimens.Padding.medium))
 
         MemoTextField(
@@ -323,7 +322,6 @@ private fun SignInView(
             onCancelClicked()
         }
         Spacer(modifier = Modifier.height(Dimens.Padding.medium))
-
     }
 }
 

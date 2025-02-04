@@ -19,7 +19,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,7 +28,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.childhoodmemories.a80s90s.R
 import com.childhoodmemories.a80s90s.Screen
-import com.childhoodmemories.a80s90s.ui.StoreData
 import com.childhoodmemories.a80s90s.ui.designSystem.IconButton
 import com.childhoodmemories.a80s90s.ui.designSystem.MemoCard
 import com.childhoodmemories.a80s90s.ui.theme.Dimens
@@ -41,8 +39,6 @@ fun HomeScreen(
     navController: NavController,
     viewModel: HomeViewModel = viewModel(),
 ) {
-    val dataStore = remember { StoreData }
-    
     val state = viewModel.getState()
 
     LaunchedEffect(Unit) {
@@ -70,7 +66,6 @@ fun HomeScreen(
                     MemoCard(
                         memory = memory,
                         isLiked = viewModel.isLiked(memory),
-                        dataStore = dataStore
                     ) {
                         viewModel.onLikeClicked(memory)
                     }

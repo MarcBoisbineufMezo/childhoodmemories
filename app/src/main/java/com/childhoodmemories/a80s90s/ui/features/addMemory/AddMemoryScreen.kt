@@ -32,7 +32,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil3.compose.AsyncImage
 import com.childhoodmemories.a80s90s.R
-import com.childhoodmemories.a80s90s.ui.StoreData
 import com.childhoodmemories.a80s90s.ui.designSystem.GalleryLauncher
 import com.childhoodmemories.a80s90s.ui.designSystem.IconButton
 import com.childhoodmemories.a80s90s.ui.designSystem.MemoTextField
@@ -47,7 +46,6 @@ fun AddMemoryScreen(
 ) {
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     var showGallery by remember { mutableStateOf(false) }
-    val dataStore = remember { StoreData }
 
     val state = viewModel.getState()
 
@@ -118,7 +116,7 @@ fun AddMemoryScreen(
         }
 
         if (showGallery) {
-            GalleryLauncher(dataStore = dataStore, id = state.imageId.toString()) { uri ->
+            GalleryLauncher { uri ->
                 selectedImageUri = uri
                 showGallery = false
             }

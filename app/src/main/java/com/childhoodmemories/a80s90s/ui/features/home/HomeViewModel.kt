@@ -32,7 +32,7 @@ class HomeViewModel : ViewModel() {
     fun init() {
         loadCurrentUser()
         viewModelScope.launch {
-            val memories = getMemoriesUseCase()
+            val memories = getMemoriesUseCase().shuffled()
             val likedMemories = getLikedMemoriesUseCase()
             _state.value = _state.value.copy(
                 screenState = ScreenState.Loaded,
