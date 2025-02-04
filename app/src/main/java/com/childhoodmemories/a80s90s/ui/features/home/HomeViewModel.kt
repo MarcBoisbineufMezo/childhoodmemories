@@ -6,6 +6,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.childhoodmemories.a80s90s.domain.GetCurrentUserUseCase
+import com.childhoodmemories.a80s90s.domain.GetLikedMemoriesUseCase
+import com.childhoodmemories.a80s90s.domain.LikeMemoryUseCase
 import com.childhoodmemories.a80s90s.domain.LoadMemoriesUseCase
 import com.childhoodmemories.a80s90s.model.Memory
 import com.childhoodmemories.a80s90s.model.User
@@ -17,6 +19,8 @@ class HomeViewModel : ViewModel() {
 
     val loadMemoriesUseCase = LoadMemoriesUseCase()
     val getCurrentUserUseCase = GetCurrentUserUseCase()
+    val likeMemoryUseCase = LikeMemoryUseCase()
+    val getLikedMemoriesUseCase = GetLikedMemoriesUseCase()
 
     // State
     private val _state by lazy { MutableStateFlow(State()) }
@@ -29,9 +33,11 @@ class HomeViewModel : ViewModel() {
         loadCurrentUser()
         viewModelScope.launch {
             val memories = loadMemoriesUseCase()
+            val likedMemories = getLikedMemoriesUseCase()
             _state.value = _state.value.copy(
                 screenState = ScreenState.Loaded,
-                memories = memories
+                memories = memories,
+                likedMemories = likedMemories,
             )
         }
     }
@@ -45,16 +51,29 @@ class HomeViewModel : ViewModel() {
         }
     }
 
+    fun onLikeClicked(memory: Memory) {
+        val likedMemories = if (isLiked(memory)) {
+            _state.value.likedMemories - memory
+        } else {
+            _state.value.likedMemories + memory
+        }
+        _state.value = _state.value.copy(likedMemories = likedMemories)
+        viewModelScope.launch {
+            likeMemoryUseCase(memory)
+        }
+    }
+
+    fun isLiked(memory: Memory): Boolean {
+        return _state.value.likedMemories.contains(memory)
+    }
+
     @Immutable
     data class State(
-        val sideEffect: SideEffect? = null,
         val screenState: ScreenState = ScreenState.Loading,
         val user: User? = null,
-        val memories: List<Memory> = emptyList()
+        val memories: List<Memory> = emptyList(),
+        val likedMemories: List<Memory> = emptyList()
     )
-
-    enum class SideEffect {
-    }
 
     enum class ScreenState {
         Loading,

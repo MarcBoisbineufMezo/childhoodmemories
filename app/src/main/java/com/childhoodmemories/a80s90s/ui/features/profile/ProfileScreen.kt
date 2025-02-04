@@ -100,6 +100,7 @@ fun ProfileScreen(
                     .padding(Dimens.Padding.medium)
                     .fillMaxWidth(),
                 memories = state.memories,
+                likeCounter = state.likeCounter,
             )
             MemoriesProfile(
                 modifier = Modifier
@@ -144,7 +145,7 @@ fun MemoriesProfile(
 }
 
 @Composable
-fun DataProfile(modifier: Modifier, memories: List<Memory>) {
+fun DataProfile(modifier: Modifier, memories: List<Memory>, likeCounter: Int) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceEvenly,
@@ -153,7 +154,7 @@ fun DataProfile(modifier: Modifier, memories: List<Memory>) {
             title = stringResource(id = R.string.memories),
             value = memories.size.toString()
         )
-        DataProfileView(stringResource(id = R.string.likes), memories.size.toString())
+        DataProfileView(stringResource(id = R.string.likes), likeCounter.toString())
 //        DataProfileView(stringResource(id = R.string.memories), memories.size.toString())
     }
 }

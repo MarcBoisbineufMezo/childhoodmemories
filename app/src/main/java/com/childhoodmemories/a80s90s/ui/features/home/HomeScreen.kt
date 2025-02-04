@@ -88,7 +88,9 @@ fun HomeScreen(
                 contentPadding = PaddingValues(Dimens.Padding.medium),
             ) {
                 items(state.memories) { memory ->
-                    MemoCard(memory = memory)
+                    MemoCard(memory = memory, isLiked = viewModel.isLiked(memory)) {
+                        viewModel.onLikeClicked(memory)
+                    }
                 }
             }
         }
@@ -141,7 +143,7 @@ private fun HeaderHome(
                 modifier = Modifier
                     .padding(horizontal = Dimens.Padding.medium)
             )
-            // TODO add filters
+            // TODO add filters categories?
         }
         Spacer(modifier = Modifier.weight(1f))
         IconButton(

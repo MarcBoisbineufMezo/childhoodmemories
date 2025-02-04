@@ -100,8 +100,8 @@ fun GetStartedScreen(
                 ScreenState.Loading -> {
                     Box(
                         modifier = modifier
-                            .size(40.dp)
-                            .background(color = Color.Transparent)
+                            .padding(Dimens.Padding.large)
+                            .fillMaxSize()
                             .wrapContentSize(align = Alignment.Center)
                     ) {
                         CircularProgressIndicator(
@@ -140,8 +140,6 @@ fun GetStartedScreen(
                             },
 
                             onSignInClick = {
-                                // TODO manage login with error
-//                                navController.navigate(Screen.Home.route)
                                 viewModel.signIn()
                             },
                             onCancelClicked = {

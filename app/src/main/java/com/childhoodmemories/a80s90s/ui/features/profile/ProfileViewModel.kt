@@ -6,6 +6,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.childhoodmemories.a80s90s.domain.GetCurrentUserUseCase
+import com.childhoodmemories.a80s90s.domain.GetLikedMemoriesUseCase
 import com.childhoodmemories.a80s90s.domain.GetUserMemoriesUseCase
 import com.childhoodmemories.a80s90s.domain.LogOutUseCase
 import com.childhoodmemories.a80s90s.model.Memory
@@ -18,6 +19,7 @@ class ProfileViewModel : ViewModel() {
     val logOutUseCase = LogOutUseCase()
     val getCurrentUserUseCase = GetCurrentUserUseCase()
     val getUserMemoriesUseCase = GetUserMemoriesUseCase()
+    val getLikedMemoriesUseCase = GetLikedMemoriesUseCase()
 
     // State
     private val _state by lazy { MutableStateFlow(State()) }
@@ -34,6 +36,7 @@ class ProfileViewModel : ViewModel() {
         viewModelScope.launch {
             val currentUser = getCurrentUserUseCase()
             val memories = getUserMemoriesUseCase()
+            val likedMemories = getLikedMemoriesUseCase()
             currentUser?.let {
                 _state.value = _state.value.copy(
                     user = currentUser,
@@ -41,6 +44,7 @@ class ProfileViewModel : ViewModel() {
                     avatar = it.avatar.orEmpty(),
                     screenState = ScreenState.Loaded,
                     memories = memories,
+                    likeCounter = likedMemories.size
                 )
             }
         }
@@ -59,6 +63,7 @@ class ProfileViewModel : ViewModel() {
         val name: String = "",
         val avatar: String = "",
         val memories: List<Memory> = emptyList(),
+        val likeCounter: Int = 0,
     )
 
     enum class SideEffect {

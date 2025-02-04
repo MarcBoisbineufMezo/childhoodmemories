@@ -12,6 +12,19 @@ object MemoryRepository {
         // TODO improve with suspend
         return memorieDao.memories + mockMemoriesList.sortedByDescending { it.id }
     }
+
+    fun loadLikedMemories(userId: String): List<Memory> {
+        return memorieDao.loadLikedMemories(userId)
+    }
+
+    fun saveLikedMemories(userId: String, memory: Memory) {
+        val likedMemories = loadLikedMemories(userId)
+        if (likedMemories.contains(memory)) {
+            memorieDao.saveLikedMemories(userId, likedMemories - memory)
+        } else {
+            memorieDao.saveLikedMemories(userId, likedMemories + memory)
+        }
+    }
 }
 
 val memory1 = Memory(

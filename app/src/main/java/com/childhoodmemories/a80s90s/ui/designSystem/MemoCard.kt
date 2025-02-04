@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -36,6 +37,8 @@ import com.childhoodmemories.a80s90s.ui.theme.violet
 fun MemoCard(
     modifier: Modifier = Modifier,
     memory: Memory,
+    isLiked: Boolean,
+    onLikeClicked: (Memory) -> Unit,
 ) {
     Card(
         modifier = modifier
@@ -47,7 +50,9 @@ fun MemoCard(
         Box {
             Column {
                 HeaderCard(user = memory.user)
-                BodyCard(memory = memory)
+                BodyCard(memory = memory, isLiked = isLiked) {
+                    onLikeClicked(it)
+                }
             }
 
         }
@@ -55,7 +60,11 @@ fun MemoCard(
 }
 
 @Composable
-private fun BodyCard(memory: Memory) {
+private fun BodyCard(
+    memory: Memory,
+    isLiked: Boolean,
+    onLikeClicked: (Memory) -> Unit,
+) {
     val contrast = 2f
     val brightness = -180f
     val colorMatrix = ColorMatrix(
@@ -86,9 +95,11 @@ private fun BodyCard(memory: Memory) {
                 modifier = Modifier
                     .padding(horizontal = Dimens.Padding.large)
                     .align(Alignment.BottomEnd),
-                icon = Icons.Filled.FavoriteBorder,
-                selected = true,
-            ) { }
+                icon = if (isLiked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                selected = isLiked,
+            ) {
+                onLikeClicked(memory)
+            }
 
         }
         Text(
@@ -140,5 +151,5 @@ private fun HeaderCard(user: User) {
 @Preview
 @Composable
 fun MemoCardPreview() {
-    MemoCard(memory = memory1)
+    MemoCard(memory = memory1, isLiked = true) {}
 }

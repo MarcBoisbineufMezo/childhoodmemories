@@ -24,6 +24,21 @@ class MemorieDao {
             sharedPreferences?.edit()?.putString(MEMO_MEMO_LIST, json)?.apply()
         }
 
+    fun loadLikedMemories(idUser: String): List<Memory> {
+        val json = sharedPreferences?.getString(idUser, null)
+        return if (json != null) {
+            val type = object : TypeToken<List<Memory>>() {}.type
+            gson.fromJson(json, type)
+        } else {
+            emptyList()
+        }
+    }
+
+    fun saveLikedMemories(idUser: String, memories: List<Memory>) {
+        val json = gson.toJson(memories)
+        sharedPreferences?.edit()?.putString(idUser, json)?.apply()
+    }
+
     companion object {
         private const val MEMO_MEMO_LIST = "MEMO_MEMO_LIST"
     }
